@@ -1,0 +1,13 @@
+# OS files
+.DS_Store
+# codelite workspace files
+.codelite
+# flasher ini files
+AsuroFl.ini
+# C compiling results
+*.o
+*.d
+*.eep
+*.elf
+*.map
+*.lss
