@@ -23,7 +23,7 @@
 #include <inttypes.h>
 
 #include "asuro.h"
-//#include "TimerService.h"
+#include "TimerService.h"
 
 volatile int lights_on = 0;
 void fun1(void) {
@@ -45,10 +45,11 @@ void fun1(void) {
 int main (void)
 {
 	Init();
+	ts_init();
 	
-	//TSinitTimerService(1);
-	//void (*pfun1) (void) = &fun1;
-	//TSaddFunction(0, pfun1, 10);
+	void (*pfun1) (void) = &fun1;
+	int id;
+	id = ts_addFunction(pfun1,1000);
 	
 	// teste taster
 	unsigned int data[] = {0,0};
