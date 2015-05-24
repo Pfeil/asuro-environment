@@ -19,11 +19,9 @@
  *   any later version.                                                    *
  ***************************************************************************/
 #include <avr/interrupt.h> //ISR(), cli(), sei()
-#include <avr/io.h>
-#include <inttypes.h>
 
-#include "asuro.h"
-#include "TimerService.h"
+#include "asuro.h" // Init(), NULL, Motor*()
+#include "TimerService.h" // ts_init(), ts_addFunction()
 
 volatile int lights_on = 0;
 void fun1(void) {

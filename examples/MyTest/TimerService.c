@@ -1,5 +1,5 @@
 #include "TimerService.h"
-#include "asuro.h"
+#include "asuro.h" // NULL
 #include <avr/interrupt.h> // ISR(), cli(), sei()
 
 static volatile func_struct set_srv[MAX_SERVICES];
