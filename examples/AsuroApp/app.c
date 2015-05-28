@@ -23,21 +23,14 @@
 #include "asuro.h" // Init(), NULL, Motor*()
 #include "TimerService.h" // ts_init(), ts_addFunction()
 
-volatile int lights_on = 0;
+unsigned int data[] = {0,0};
 void fun1(void) {
-	SerPrint("\n\rfun1 number: ");
-	PrintInt(lights_on);
+	OdometryData(data);
+	//print
+	PrintInt(data[0]);
+	SerPrint(";");
+	PrintInt(data[1]);
 	SerPrint("\n\r");
-	
-	if (lights_on == 0) {
-		StatusLED(YELLOW);
-		BackLED(ON,OFF);
-		lights_on = 1;
-	} else {
-		StatusLED(GREEN);
-		BackLED(OFF,ON);
-		lights_on = 0;
-	}
 }
 
 int main (void)
@@ -46,25 +39,13 @@ int main (void)
 	ts_init();
 	
 	void (*pfun1) (void) = &fun1;
-	int id;
-	id = ts_addFunction(pfun1,1000);
+	ts_addFunction(pfun1,100);
 	
-	// teste taster
-	unsigned int data[] = {0,0};
 	MotorDir(FWD,FWD);
-	//MotorSpeed(50,50);
+	MotorSpeed(90,90);
 	while(1)
 	{
-		//fetch data
-		//LineData(data);
-		OdometryData(data);
-		//print
-		PrintInt(data[0]);
-		SerPrint(";");
-		PrintInt(data[1]);
-		SerPrint("\n\r");
-		//sleep
-		Msleep(25);
+		// run app
 	}
 }
 

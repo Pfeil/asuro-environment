@@ -44,8 +44,8 @@ void ts_init(void) {
 
 	// init timer
 	cli();
-	TCCR0 = ((1<<CS01) | (1<<CS00));
-	TIMSK = ((1<<TOIE0));
+	TCCR0 = (1<<CS01);
+	TIMSK |= ((1<<TOIE0));
 	sei();
 }
 
@@ -54,7 +54,7 @@ int ts_addFunction(void (*function)(void), unsigned int interval) {
 	if ( handle >= 0 ) // if location found, set it up
 	{
 		set_srv[handle].fp = function;
-		set_srv[handle].interval = interval;
+		set_srv[handle].interval = interval*4;
 		set_srv[handle].counter = 0;
 	}
 	return handle;
