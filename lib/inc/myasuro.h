@@ -16,18 +16,18 @@
   \par Odometrie/Encoder:
 
   Korrekturwerte fuer Odometrie/Encoder in der SIG_ADC Interrupt Funktion.
-  Die Werte kˆnnen mit dem OdometrieTest Programm ermittelt werden.
-  Dabei wird eine Messreihe f¸r den linken und rechten Encoder angelegt.
-  In einem Tabbelverarbeitungsprogramm (Excel o.‰.) kann die Messreihe eingelesen
+  Die Werte k√∂nnen mit dem OdometrieTest Programm ermittelt werden.
+  Dabei wird eine Messreihe f√ºr den linken und rechten Encoder angelegt.
+  In einem Tabbelverarbeitungsprogramm (Excel o.√§.) kann die Messreihe eingelesen
   und grafisch dargestellt werden.
-  Die Schwellwerte f¸r hell und dunkel kˆnnen dann
+  Die Schwellwerte f√ºr hell und dunkel k√∂nnen dann
 
   Hinweis:
 
   Beim Messen der Werte ist das ADLAR Bit des A/D Wandler auf 1 gesetzt.
   Das bedeutet, der A/D Wert wird rechts aligned in das ADH/ADL Register abgelegt.
-  ADH enth‰lt die obersten 8 Bit. ADL die untersten 8 Bit.
-  F¸r die Messung werden vom A/D Wandler Wert nur die 8 obersten Bits (ADH) ber¸cksichtigt.
+  ADH enth√§lt die obersten 8 Bit. ADL die untersten 8 Bit.
+  F√ºr die Messung werden vom A/D Wandler Wert nur die 8 obersten Bits (ADH) ber√ºcksichtigt.
   Die beiden niederwertigsten Bits (ADL) entfallen.
 
   \par Go und Turn Funktion
@@ -68,17 +68,17 @@
 
 /*! Schwellwert der gedrueckten Tasten.\n
       Erst unterhalb (kleiner) dieses Wertes wird ein Switches-ADC-Wert
-      "ernst" ( PollSwitch()>0 ) genommen. Dar¸ber ist es, insbesondere im hier
+      "ernst" ( PollSwitch()>0 ) genommen. Dar√ºber ist es, insbesondere im hier
       angestrebten Interruptbetrieb, eher Rauschen und sollte von PollSwitch() 
       als 0 bewertet werden.
       Problematisch dabei ist, dass laufende Motoren bzw. Motorlast den Messwert, 
-      auch bei nicht gedr¸ckten Tasten, nach unten verschieben und PollSwitch() 
-      liefert falsche 1 Werte wenn MY_SWITCH_THRESHHOLD nicht sorgf‰ltig gew‰hlt wird.
+      auch bei nicht gedr√ºckten Tasten, nach unten verschieben und PollSwitch() 
+      liefert falsche 1 Werte wenn MY_SWITCH_THRESHHOLD nicht sorgf√§ltig gew√§hlt wird.
 */
 #define MY_SWITCH_THRESHHOLD	1010   /*!< Schwellwert fuer Tasterwerte */
 
 /* Odometrie / Encoder */
-/* Werte f¸r 12 Segmente Encoder */
+/* Werte f√ºr 12 Segmente Encoder */
 /*! Faktor zur Berechnung von Ticks um aus den in mm angegebenen Parameter
     umzurechnen.\n
     Der Originalwert ist \b 19363L und ist von der Anzahl der schwarz/weiss
@@ -92,7 +92,7 @@
     Teilstuecke auf den Odometriescheiben abhaengig.\n
     Der Originalwert wurde durch stochri ermittelt.
 */
-#define MY_TURN_ENC_COUNT_VALUE  177L   /*!< Turn Funktion, Mutiplikator fuer Winkel */
+#define MY_TURN_ENC_COUNT_VALUE  170L   /*!< Turn Funktion, Mutiplikator fuer Winkel */
 
 /* Werte zum ausgleichen unterschiedlicher Motoren */
 /*! Differenzangabe zwischen den beiden Motoren.\n
