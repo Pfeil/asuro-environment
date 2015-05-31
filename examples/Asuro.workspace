@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Workspace Name="codelite" Database="">
   <Project Name="AsuroApp" Path="AsuroApp/AsuroApp.project" Active="No"/>
-  <Project Name="OdoQuadrat" Path="OdoQuadrat/OdoQuadrat.project" Active="Yes"/>
+  <Project Name="OdoQuadrat" Path="OdoQuadrat/OdoQuadrat.project" Active="No"/>
+  <Project Name="ReactiveBehaviour" Path="6_ReactiveBehaviour/ReactiveBehaviour.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Project Name="MyTest" ConfigName="Debug"/>
       <Project Name="AsuroApp" ConfigName="Debug"/>
       <Project Name="AsuroApp" ConfigName="Debug"/>
       <Project Name="OdoQuadrat" ConfigName="Debug"/>
+      <Project Name="6_ReactiveBehaviour" ConfigName="Debug"/>
     </WorkspaceConfiguration>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="MyTest" ConfigName="Release"/>
       <Project Name="AsuroApp" ConfigName="Release"/>
       <Project Name="AsuroApp" ConfigName="Release"/>
       <Project Name="OdoQuadrat" ConfigName="Release"/>
+      <Project Name="6_ReactiveBehaviour" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
   <Environment>
