@@ -92,7 +92,7 @@
     Teilstuecke auf den Odometriescheiben abhaengig.\n
     Der Originalwert wurde durch stochri ermittelt.
 */
-#define MY_TURN_ENC_COUNT_VALUE  170L   /*!< Turn Funktion, Mutiplikator fuer Winkel */
+#define MY_TURN_ENC_COUNT_VALUE  145L   /*!< Turn Funktion, Mutiplikator fuer Winkel */
 
 /* Werte zum ausgleichen unterschiedlicher Motoren */
 /*! Differenzangabe zwischen den beiden Motoren.\n
