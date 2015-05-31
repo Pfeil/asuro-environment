@@ -34,13 +34,21 @@ int main (void)
 	//ts_init();
 	EncoderInit();
 	
-	GoTurn(600,  0,  150);
+	SerPrint("Next: Go\n\r");
+	GoTurn(300,  0,  100);
+	SerPrint("Next: Turn\n\r");
 	GoTurn(  0, 90,  90);
-	GoTurn(600,  0,  150);
+	SerPrint("Next: Go\n\r");
+	GoTurn(300,  0,  100);
+	SerPrint("Next: Turn\n\r");
 	GoTurn(  0, 90,  90);
-	GoTurn(600,  0,  150);
+	SerPrint("Next: Go\n\r");
+	GoTurn(300,  0,  100);
+	SerPrint("Next: Turn\n\r");
 	GoTurn(  0, 90,  90);
-	GoTurn(600,  0,  150);
+	SerPrint("Next: Go\n\r");
+	GoTurn(300,  0,  100);
+	SerPrint("Next: Turn\n\r");
 	GoTurn(  0, 90,  90);
 	
 	while(1) {
