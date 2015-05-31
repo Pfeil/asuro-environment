@@ -34,22 +34,34 @@ int main (void)
 	//ts_init();
 	EncoderInit();
 	
+	int goSpeed	= 150;
+	int turnSpeed	= 90;
+	int length	= 300;
+	int degree	= 90;
+	
 	SerPrint("Next: Go\n\r");
-	GoTurn(300,  0,  100);
+	GoTurn (length, 0, goSpeed);
+
 	SerPrint("Next: Turn\n\r");
-	GoTurn(  0, 90,  90);
+	GoTurn (0, degree,  turnSpeed);
+
 	SerPrint("Next: Go\n\r");
-	GoTurn(300,  0,  100);
+	GoTurn (length, 0,  goSpeed);
+
 	SerPrint("Next: Turn\n\r");
-	GoTurn(  0, 90,  90);
+	GoTurn (0, degree,  turnSpeed);
+
 	SerPrint("Next: Go\n\r");
-	GoTurn(300,  0,  100);
+	GoTurn (length, 0,  goSpeed);
+
 	SerPrint("Next: Turn\n\r");
-	GoTurn(  0, 90,  90);
+	GoTurn (0, degree,  turnSpeed);
+
 	SerPrint("Next: Go\n\r");
-	GoTurn(300,  0,  100);
+	GoTurn (length, 0,  goSpeed);
+
 	SerPrint("Next: Turn\n\r");
-	GoTurn(  0, 90,  90);
+	GoTurn (0, degree,  turnSpeed);
 	
 	while(1) {
 		// do nothing
