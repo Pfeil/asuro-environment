@@ -19,5 +19,15 @@ void ts_init(void);
  */
 int ts_addFunction(void (*function)(void), unsigned int interval_ms);
 
+/**
+ * @brief Remove all instances containing the given function pointer.
+ * 
+ * This means that if you have a function fun(void) it is always recommended
+ * to give &fun as a parameter for both, @fun removeFunction() and @fun addFunction().
+ * 
+ * @return the amount of found and deleted instances with the same function pointer.
+ */
+int ts_removeFunction(void (*function)(void));
+
 #endif //TIMERSERVICE_H
 //--end of file--//

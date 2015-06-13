@@ -16,7 +16,6 @@ void timer0_overflow(void) {
 			}
 		}
 	}
-	//if (counter >= 124) { call_number = 0; }
 }
 
 ISR(TIMER0_OVF_vect){ timer0_overflow(); }
@@ -66,4 +65,18 @@ int ts_addFunction(void (*function)(void), unsigned int interval) {
 	}
 	return handle;
 	SREG = tmpSREG;
+}
+
+int ts_removeFunction(void (*function)(void)) {
+	int rmFunctions = 0;
+	int i;
+	for (i=0; i<MAX_SERVICES; i++) {
+		if (set_srv[i].fp == function) {
+			set_srv[i].fp = NULL;
+			set_srv[i].counter = 0;
+			set_srv[i].interval = 0;
+			rmFunctions++;
+		}
+	}
+	return rmFunctions;
 }
