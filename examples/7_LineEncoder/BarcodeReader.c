@@ -5,10 +5,10 @@
 
 #define TIMESTEP 20 //counter increment (default 5, so timer+=5 every 5ms)
 #define READ_SPEED 80
-#define M_WINDOW_SIZE 10 //in measurements / data points
+#define M_WINDOW_SIZE 30 //in measurements / data points
 #define M_SAMPLING_FREQ 1 //in milliseconds
 #define M_RAW_DATAPOINTS 3 //in measurements / data points
-#define M_TOL 80 // metric tolerance
+#define M_TOL (3 * M_WINDOW_SIZE) // metric tolerance
 
 unsigned int timediff;
 volatile unsigned int timer;
@@ -68,12 +68,17 @@ int bcr_getGradient(void) {
 //	cli();
 	int deltaY = lineData[latestLineData] - lineData[(latestLineData+1) % M_WINDOW_SIZE];
 //	sei();
-	// instead of dividing, I made the tolerance bigger.
-	return deltaY /* / M_WINDOW_SIZE*/;
+	/* Instead of dividing though deltaX (which is M_WINDOW_SIZE),
+	 * I multiplied the tolerance (M_TOL) with M_WINDOW_SIZE.
+	 * Since this is a polling function, this may have some impact. */
+	return deltaY /* / M_WINDOW_SIZE */;
 }
 
 void bcr_cleanBCR(void) {
-	// TODO erase services from timerservice
+	util_pauseInterrupts();
+	ts_removeFunction(&count);
+	ts_removeFunction(&measureDataPoint);
+	util_recoverInterruptState();
 }
 
 void bcr_initBarcodeReader(void) {

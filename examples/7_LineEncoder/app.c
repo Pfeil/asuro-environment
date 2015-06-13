@@ -26,30 +26,18 @@
 #include "BarcodeReader.h"
 #include "MyUtils.h"
 
-inline void initStuff(void) {
-	Init();
-	//EncoderInit();
-	//ts_init();
+// keep as usage example
+void scanLines(int num) {
+	//Init();
+	bcr_initBarcodeReader();
+	int n = bcr_scanLines(num);
+	bcr_cleanBCR();
+	util_intToBeep(n);
 }
 
 int main (void)
 {
-	initStuff();
-	bcr_initBarcodeReader();
-	int n = bcr_scanLines(4);
-	util_intToBeep(n);
-	bcr_cleanBCR();
-
-	int m = 0;
-	while(0)
-	{
-		m = changeMetric();
-		PrintInt(m);
-		Msleep(5);
-		SerPrint("\n\r");
-		Msleep(5);
-	}
-	Msleep(1000);
-	SerPrint("-- END OF LINE --\n\r");
+	Init();
+	scanLines(5);
 	return 0;
 }
