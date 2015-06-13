@@ -24,6 +24,6 @@ int bcr_scanLines(unsigned char num);
  */
 void bcr_cleanBCR(void);
 
-int changeMetric(void);
+int bcr_getGradient(void);
 
 #endif /* BARCODEREADER_H */

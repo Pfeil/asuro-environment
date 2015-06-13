@@ -43,15 +43,12 @@ void count(void) {
 
 volatile unsigned int tmpMeasures[M_RAW_DATAPOINTS];
 volatile unsigned int rawCounter;
-// TODO remove debugs
+
 void measureDataPoint(void) {
 	unsigned int tmp[2];
 	LineData(tmp);
 	tmpMeasures[rawCounter] = util_lineCorrection(tmp[LEFT]);
 	rawCounter++;;
-//	PrintInt(rawCounter); TODO remove
-//	SerPrint(" // ");
-//	Msleep(2);
 	
 	if (rawCounter >= M_RAW_DATAPOINTS) {
 		rawCounter = 0;
@@ -63,20 +60,15 @@ void measureDataPoint(void) {
 		sum /= M_RAW_DATAPOINTS;
 		
 		latestLineData = (latestLineData+1) % M_WINDOW_SIZE;
-//		PrintInt(latestLineData); TODO remove
-//		SerPrint(" // ");
 		lineData[latestLineData] = sum;
-//		PrintInt(sum); TODO remove
 	}
-//	SerPrint("\n\r"); TODO remove
-//	Msleep(2);
 }
 
-int changeMetric(void) {
+int bcr_getGradient(void) {
 //	cli();
 	int deltaY = lineData[latestLineData] - lineData[(latestLineData+1) % M_WINDOW_SIZE];
 //	sei();
-	// Statt divisor wird Toleranz angepasst, ist effektiver.
+	// instead of dividing, I made the tolerance bigger.
 	return deltaY /* / M_WINDOW_SIZE*/;
 }
 
@@ -119,7 +111,7 @@ int bcr_scanLines(unsigned char num)
 		{
 			case BCR_DIMMING_STATE:
 				setTime(0);
-				while (changeMetric() > -1*M_TOL) {
+				while (bcr_getGradient() > -1*M_TOL) {
 					//if (timer > 2*timediff) { return lineCounter; } // TODO lieber getTime() nehmen?
 				}
 				currentState = BCR_BRIGHTEN_STATE;
@@ -127,7 +119,7 @@ int bcr_scanLines(unsigned char num)
 				break;
 			case BCR_BRIGHTEN_STATE:
 				setTime(0);
-				while (changeMetric() < M_TOL) {
+				while (bcr_getGradient() < M_TOL) {
 					//if (timer > 2*timediff) { return lineCounter; } // TODO lieber getTime() nehmen?
 				}
 				currentState = BCR_DIMMING_STATE;
