@@ -101,7 +101,7 @@
     Bei einem positiven Wert, wird der rechte Motor verstaerkt.\n
     Bei einem negativen Wert, wird der linke Motor verstaerkt.
   */
-#define MY_MOTOR_DIFF              0    /*!< 1/2 PLUS fuer Rechts, 1/2 MINUS fuer Links */
+#define MY_MOTOR_DIFF              -10    /*!< 1/2 PLUS fuer Rechts, 1/2 MINUS fuer Links */
 
 /* I2C Bus Definitionen */
 
