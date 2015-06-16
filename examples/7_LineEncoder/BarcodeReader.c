@@ -3,15 +3,12 @@
 #include "MyUtils.h"
 #include "Asuro.h"
 
-#define TIMESTEP 20 //counter increment (default 5, so timer+=5 every 5ms)
 #define READ_SPEED 80
-#define M_WINDOW_SIZE 30 //in measurements / data points
-#define M_SAMPLING_FREQ 1 //in milliseconds
-#define M_RAW_DATAPOINTS 3 //in measurements / data points
-#define M_TOL (3 * M_WINDOW_SIZE) // metric tolerance
+#define M_WINDOW_SIZE 30 //in measurements / data points (default 30)
+#define M_SAMPLING_FREQ 1 //in milliseconds (default 1)
+#define M_RAW_DATAPOINTS 3 //in measurements / data points (default 3)
+#define M_TOL (5 + M_SAMPLING_FREQ * M_RAW_DATAPOINTS * M_WINDOW_SIZE) // metric tolerance
 
-unsigned int timediff;
-volatile unsigned int timer;
 unsigned char lineCounter;
 volatile unsigned int lineData[M_WINDOW_SIZE];
 volatile unsigned int latestLineData;
@@ -22,24 +19,6 @@ enum state {
 };
 
 enum state currentState;
-
-
-inline void setTime(unsigned int x) {
-	cli();
-	timer = x;
-	sei();
-}
-
-inline unsigned int getTime(void) {
-	cli();
-	unsigned int result = timer;
-	sei();
-	return result;
-}
-
-void count(void) {
-	timer += TIMESTEP;
-}
 
 volatile unsigned int tmpMeasures[M_RAW_DATAPOINTS];
 volatile unsigned int rawCounter;
@@ -68,15 +47,14 @@ int bcr_getGradient(void) {
 //	cli();
 	int deltaY = lineData[latestLineData] - lineData[(latestLineData+1) % M_WINDOW_SIZE];
 //	sei();
-	/* Instead of dividing though deltaX (which is M_WINDOW_SIZE),
+	/* Instead of dividing though deltaX,
 	 * I multiplied the tolerance (M_TOL) with M_WINDOW_SIZE.
 	 * Since this is a polling function, this may have some impact. */
-	return deltaY /* / M_WINDOW_SIZE */;
+	return deltaY /* / (M_SAMPLING_FREQ * M_RAW_DATAPOINTS * M_WINDOW_SIZE) */;
 }
 
 void bcr_cleanBCR(void) {
 	util_pauseInterrupts();
-	ts_removeFunction(&count);
 	ts_removeFunction(&measureDataPoint);
 	util_recoverInterruptState();
 }
@@ -97,45 +75,69 @@ void bcr_initBarcodeReader(void) {
 		Msleep(5);
 	}
 	
-	timer = 0;
 	ts_init();
-	ts_addFunction(&count, TIMESTEP);
 	ts_addFunction(&measureDataPoint, M_SAMPLING_FREQ);
 	sei();
 }
 
+int bcr_scanLines(unsigned int num) {
+	return bcr_scanIrregularLines(num, 0);
+}
 
-int bcr_scanLines(unsigned char num)
+int bcr_scanIrregularLines(unsigned char num, unsigned int spacing)
 {
-	// assume we stand on white
+	if (spacing < 2) { spacing = 2; } /* default buffer */
+	/* maxlength = 100 means that it will drive max. 100 ticks
+	 * to find the first bar! Later in the code it will contain
+	 * the regular space between the bars. */
+	unsigned int whiteLength = 200;
+	unsigned int blackLength = 200;
+	lineCounter = 0;
+	
+	/* assume we stand on white (or not completely dark) */
 	currentState = BCR_DIMMING_STATE;
+	EncoderSet(0,0);
 	MotorSpeed(READ_SPEED, READ_SPEED);
 	
 	while(1) {
 		switch (currentState)
 		{
 			case BCR_DIMMING_STATE:
-				setTime(0);
-				while (bcr_getGradient() > -1*M_TOL) {
-					//if (timer > 2*timediff) { return lineCounter; } // TODO lieber getTime() nehmen?
+				EncoderSet(0,0);
+				while (bcr_getGradient() >= -1*M_TOL) {
+					if ( encoder[LEFT] > (whiteLength+spacing) ) {
+						MotorDir(BREAK, BREAK);
+						MotorSpeed(0,0);
+						return lineCounter;
+					}
 				}
+				
+				if (lineCounter >= 1) { whiteLength = encoder[LEFT]; }
 				currentState = BCR_BRIGHTEN_STATE;
 				lineCounter += 1;
 				break;
+
 			case BCR_BRIGHTEN_STATE:
-				setTime(0);
-				while (bcr_getGradient() < M_TOL) {
-					//if (timer > 2*timediff) { return lineCounter; } // TODO lieber getTime() nehmen?
+				EncoderSet(0,0);
+				while (bcr_getGradient() <= M_TOL) {
+//					if ( encoder[LEFT] > (2*whiteLength+spacing) ) {
+//						MotorDir(BREAK, BREAK);
+//						MotorSpeed(0,0);
+//						return lineCounter;
+//					}
 				}
 				currentState = BCR_DIMMING_STATE;
 				break;
 		}
-		if (lineCounter>0 && lineCounter >= num) {
+
+		/* enough lines scanned? -> stop */
+		if (num>0 && lineCounter >= num) {
 			MotorDir(BREAK, BREAK);
 			MotorSpeed(0,0);
 			break;
 		}
-	}
+	} // end switch
+
 	MotorSpeed(0,0);
 	return lineCounter;
 }

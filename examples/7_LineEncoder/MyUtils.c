@@ -28,9 +28,9 @@ void util_intToBeep(int value) {
 	for(i=0; i<value; i++) {
 		MotorDir(FWD,FWD);
 		MotorSpeed(40,40);
-		Msleep(25);
+		Msleep(50);
 		MotorSpeed(0,0);
-		Msleep(25);
+		Msleep(35);
 	}
 	MotorSpeed(0,0);
 }

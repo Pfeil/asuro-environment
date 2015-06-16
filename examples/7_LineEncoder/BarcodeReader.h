@@ -10,12 +10,26 @@ void bcr_initBarcodeReader(void);
  * @brief Drive over max. num lines and then stop.
  * 
  * If less than num lines are there, it will stop after the last one.
- * To scan the whole car code, set num to zero.
+ * To scan the whole bar code, set num to zero.
  * 
- * @param num the amount of lined to scan and drive over.
+ * @param num the amount of lines to scan and drive over.
  * @return the amount of lines driven over.
  */
-int bcr_scanLines(unsigned char num);
+int bcr_scanLines(unsigned int num);
+
+/**
+ * @brief Drive over max. num lines and then stop.
+ * 
+ * If less than num lines are there, it will stop after the last one.
+ * To scan the whole bar code, set num to zero.
+ * To allow irregular spaces, use spaces to tell how big the space
+ * between two bars shall be at max.
+ * 
+ * @param num the amount of lines to scan and drive over.
+ * @param spacing the amount of additional space between the lines (in odometry fields).
+ * @return the amount of lines driven over.
+ */
+int bcr_scanIrregularLines(unsigned char num, unsigned int spacing);
 
 /**
  * @brief Contrary function to @function bcr_initBarcodeReader().

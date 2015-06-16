@@ -38,6 +38,12 @@ void scanLines(int num) {
 int main (void)
 {
 	Init();
-	scanLines(5);
+	
+	int i;
+	for (i=0; i<1; i++) {
+		scanLines(0);
+		Msleep(500);
+	}
+	
 	return 0;
 }
