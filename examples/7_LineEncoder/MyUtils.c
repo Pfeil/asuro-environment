@@ -1,7 +1,7 @@
 #include "MyUtils.h"
 #include "asuro.h"
 
-#define LIGHT_FAULT 75 //oder 85
+#define LIGHT_FAULT 85 //oder 85
 
 /**
  * @brief Returns stable line data as parameter and offset as retrn value.

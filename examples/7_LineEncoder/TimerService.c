@@ -1,6 +1,6 @@
 #include "TimerService.h"
 #include "asuro.h" // NULL
-#include <avr/interrupt.h> // ISR(), cli(), sei()
+//#include <avr/interrupt.h> // ISR(), cli(), sei()
 
 static volatile func_struct set_srv[MAX_SERVICES];
 char initialized = 0;
@@ -63,8 +63,8 @@ int ts_addFunction(void (*function)(void), unsigned int interval) {
 		set_srv[handle].interval = interval*4;
 		set_srv[handle].counter = 0;
 	}
-	return handle;
 	SREG = tmpSREG;
+	return handle;
 }
 
 int ts_removeFunction(void (*function)(void)) {

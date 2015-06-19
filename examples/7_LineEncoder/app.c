@@ -24,6 +24,7 @@
 #include "asuro.h" // Init(), NULL, Motor*(), ...
 #include "TimerService.h" // ts_init(), ts_addFunction()
 #include "BarcodeReader.h"
+#include "LineSearch.h"
 #include "MyUtils.h"
 
 // keep as usage example
@@ -38,12 +39,11 @@ void scanLines(int num) {
 int main (void)
 {
 	Init();
-	
-	int i;
-	for (i=0; i<1; i++) {
-		scanLines(0);
-		Msleep(500);
-	}
+	//scanLines(0);
+	lis_init();
+	lis_followLine();
+	lis_clean();
+	BackLED(ON,ON);
 	
 	return 0;
 }

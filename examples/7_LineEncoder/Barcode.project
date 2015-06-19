@@ -28,6 +28,8 @@
     <File Name="BarcodeReader.c"/>
     <File Name="MyUtils.h"/>
     <File Name="MyUtils.c"/>
+    <File Name="LineSearch.h"/>
+    <File Name="LineSearch.c"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>

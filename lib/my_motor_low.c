@@ -84,6 +84,7 @@ void MyMotorSpeed (
            int  l_speed;
            int  r_speed;
 	MotorSpeed(left_speed, right_speed);
+	Msleep(10);
   if (MY_MOTOR_DIFF != 0)
   {
     /*
