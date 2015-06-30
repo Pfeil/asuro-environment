@@ -2,9 +2,6 @@
 <CodeLite_Workspace Name="codelite" Database="">
   <Project Name="AsuroApp" Path="AsuroApp/AsuroApp.project" Active="No"/>
   <Project Name="OdoQuadrat" Path="OdoQuadrat/OdoQuadrat.project" Active="No"/>
-  <Environment>
-    <![CDATA[]]>
-  </Environment>
   <Project Name="ReactiveBehaviour" Path="6_ReactiveBehaviour/ReactiveBehaviour.project" Active="No"/>
   <Project Name="Barcode" Path="7_LineEncoder/Barcode.project" Active="No"/>
   <BuildMatrix>
@@ -27,4 +24,7 @@
       <Project Name="7_Barcode" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
+  <Environment>
+    <![CDATA[]]>
+  </Environment>
 </CodeLite_Workspace>

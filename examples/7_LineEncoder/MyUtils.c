@@ -23,7 +23,8 @@ inline unsigned int util_lineCorrection(unsigned int linedata) {
 }
 
 void util_intToBeep(int value) {
-	Msleep(100);
+	MotorSpeed(0,0);
+	Msleep(200);
 	int i;
 	for(i=0; i<value; i++) {
 		MotorDir(FWD,FWD);
@@ -43,4 +44,19 @@ inline void util_pauseInterrupts(void) {
 
 inline void util_recoverInterruptState(void) {
 	SREG = tmp_SREG;
+}
+
+inline unsigned char util_getCollisions(void) {
+	unsigned char result = 0;
+	result  = PollSwitch() & 0b00111111;
+	Msleep(5);
+	result &= PollSwitch() & 0b00111111;
+	Msleep(5);
+	result &= PollSwitch() & 0b00111111;
+	return result;
+}
+
+inline int util_lineFound(void) {
+	return 0; // TODO implement this shit
+
 }

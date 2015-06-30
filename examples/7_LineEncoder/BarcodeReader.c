@@ -4,11 +4,13 @@
 #include "Asuro.h"
 
 #define READ_SPEED 80
-#define M_WINDOW_SIZE 30 //in measurements / data points (default 30)
-#define M_SAMPLING_FREQ 1 //in milliseconds (default 1)
-#define M_RAW_DATAPOINTS 3 //in measurements / data points (default 3)
-#define M_TOL (5 + M_SAMPLING_FREQ * M_RAW_DATAPOINTS * M_WINDOW_SIZE) // metric tolerance
+#define M_WINDOW_SIZE 10 //in measurements / data points (default 30)
+#define M_SAMPLING_FREQ 2 //in milliseconds (default 1)
+#define M_RAW_DATAPOINTS 2 //in measurements / data points (default 3)
+#define M_TOL (M_SAMPLING_FREQ * M_RAW_DATAPOINTS * M_WINDOW_SIZE) // metric tolerance
+//#define M_TOL (0.5 * M_SAMPLING_FREQ * M_RAW_DATAPOINTS * M_WINDOW_SIZE) // metric tolerance
 
+float tolFactor; // depends on brightness of "white"
 unsigned char lineCounter;
 volatile unsigned int lineData[M_WINDOW_SIZE];
 volatile unsigned int latestLineData;
@@ -22,6 +24,10 @@ enum state currentState;
 
 volatile unsigned int tmpMeasures[M_RAW_DATAPOINTS];
 volatile unsigned int rawCounter;
+
+inline float getToleranceValue(int x) {
+	return (0.5/750)*x + 0.35;
+}
 
 void measureDataPoint(void) {
 	unsigned int tmp[2];
@@ -68,6 +74,10 @@ void bcr_initBarcodeReader(void) {
 	rawCounter = 0;
 	latestLineData = 0;
 	
+	unsigned int tmp[2];
+	util_getStableLineData(tmp);
+	tolFactor = getToleranceValue(tmp[LEFT] + tmp[RIGHT]);
+	
 	int i;
 	util_pauseInterrupts();
 	for(i = 0; i < (M_RAW_DATAPOINTS * M_WINDOW_SIZE); i++) {
@@ -86,12 +96,12 @@ int bcr_scanLines(unsigned int num) {
 
 int bcr_scanIrregularLines(unsigned char num, unsigned int spacing)
 {
-	if (spacing < 2) { spacing = 2; } /* default buffer */
 	/* maxlength = 100 means that it will drive max. 100 ticks
 	 * to find the first bar! Later in the code it will contain
 	 * the regular space between the bars. */
 	unsigned int whiteLength = 200;
-	unsigned int blackLength = 200;
+	if (spacing < whiteLength) { spacing = whiteLength; } /* default buffer */
+//	unsigned int blackLength = 200;
 	lineCounter = 0;
 	
 	/* assume we stand on white (or not completely dark) */
@@ -104,7 +114,7 @@ int bcr_scanIrregularLines(unsigned char num, unsigned int spacing)
 		{
 			case BCR_DIMMING_STATE:
 				EncoderSet(0,0);
-				while (bcr_getGradient() >= -1*M_TOL) {
+				while (bcr_getGradient() >= -1*M_TOL*tolFactor) {
 					if ( encoder[LEFT] > (whiteLength+spacing) ) {
 						MotorDir(BREAK, BREAK);
 						MotorSpeed(0,0);
@@ -115,11 +125,13 @@ int bcr_scanIrregularLines(unsigned char num, unsigned int spacing)
 				if (lineCounter >= 1) { whiteLength = encoder[LEFT]; }
 				currentState = BCR_BRIGHTEN_STATE;
 				lineCounter += 1;
+//				util_intToBeep(1);
+//				MotorSpeed(READ_SPEED, READ_SPEED);
 				break;
 
 			case BCR_BRIGHTEN_STATE:
 				EncoderSet(0,0);
-				while (bcr_getGradient() <= M_TOL) {
+				while (bcr_getGradient() <= M_TOL*tolFactor) {
 //					if ( encoder[LEFT] > (2*whiteLength+spacing) ) {
 //						MotorDir(BREAK, BREAK);
 //						MotorSpeed(0,0);
@@ -133,7 +145,8 @@ int bcr_scanIrregularLines(unsigned char num, unsigned int spacing)
 		/* enough lines scanned? -> stop */
 		if (num>0 && lineCounter >= num) {
 			MotorDir(BREAK, BREAK);
-			MotorSpeed(0,0);
+//			MotorDir(RWD, RWD);
+//			GoTurn(-10, 0, READ_SPEED);
 			break;
 		}
 	} // end switch

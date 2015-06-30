@@ -30,6 +30,8 @@
     <File Name="MyUtils.c"/>
     <File Name="LineSearch.h"/>
     <File Name="LineSearch.c"/>
+    <File Name="WallBounce.h"/>
+    <File Name="WallBounce.c"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>

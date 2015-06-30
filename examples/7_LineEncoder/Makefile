@@ -46,7 +46,7 @@ LIBPATH = ../../lib
 INCPATH = $(LIBPATH)/inc
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = $(TARGET).c TimerService.c BarcodeReader.c MyUtils.c LineSearch.c
+SRC = $(TARGET).c TimerService.c BarcodeReader.c MyUtils.c LineSearch.c WallBounce.c
 
 # If there is more than one source file, append them above, or adjust and
 # uncomment the following:
