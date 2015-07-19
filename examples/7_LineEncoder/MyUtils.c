@@ -27,7 +27,6 @@ void util_intToBeep(int value) {
 	Msleep(200);
 	int i;
 	for(i=0; i<value; i++) {
-		MotorDir(FWD,FWD);
 		MotorSpeed(40,40);
 		Msleep(50);
 		MotorSpeed(0,0);
@@ -49,14 +48,18 @@ inline void util_recoverInterruptState(void) {
 inline unsigned char util_getCollisions(void) {
 	unsigned char result = 0;
 	result  = PollSwitch() & 0b00111111;
-	Msleep(5);
 	result &= PollSwitch() & 0b00111111;
-	Msleep(5);
 	result &= PollSwitch() & 0b00111111;
 	return result;
 }
 
 inline int util_lineFound(void) {
 	return 0; // TODO implement this shit
+}
 
+inline void waitOdo(unsigned int ticks, enum utilDir direction) {
+	EncoderSet(0,0);
+	if (direction == uLEFT || direction == uRIGHT) {
+		while (encoder[direction] < ticks) {}
+	}
 }

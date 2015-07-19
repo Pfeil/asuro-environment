@@ -4,6 +4,15 @@
 #define BIT(X) (1<<X)
 #define K(X) (1<<X)
 
+#include "asuro.h"
+
+enum utilDir {
+  uLEFT = LEFT,
+  uRIGHT = RIGHT,
+  uLAndR,
+  uLOrR
+};
+
 /**
  * @brief Returns stable line data as parameter and offset as retrn value.
  * @param data The array to return the stable line data.
@@ -19,5 +28,6 @@ inline void util_recoverInterruptState(void);
 
 inline unsigned char util_getCollisions(void);
 inline int util_lineFound(void);
+inline void waitOdo(unsigned int ticks, enum utilDir direction);
 
 #endif

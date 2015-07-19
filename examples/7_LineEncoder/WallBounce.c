@@ -3,7 +3,8 @@
 #include "MyUtils.h"
 #include "TimerService.h"
 
-#define SPEED 80
+#define SPEED 90
+#define LSPEED 50
 
 volatile unsigned char coll;
 
@@ -25,7 +26,7 @@ enum state {
 void fetchData(void) {
 	coll = util_getCollisions();
 	// TODO implement: if (coll==foo) { state = foostate; }
-	if ( (coll | K(1)) >= 0) { currentstate = STATE_LEFT; }
+	if ( 1/* (coll | K(1)) >= 0*/) { currentstate = STATE_LEFT; }
 	if (util_lineFound() == 1) {
 		MotorSpeed(0,0);
 		currentstate = STATE_LINE;
@@ -35,50 +36,38 @@ void fetchData(void) {
 void wb_init(void) {
 	EncoderInit();
 	currentstate = STATE_NO_WALL;
-	
+
 	ts_init();
 	ts_addFunction(&fetchData, 5);
+}
+
+inline void driveBack(int distance) {
+	SetMotorPower(0, (int8_t) (-1 * SPEED));
+	waitOdo(distance, uRIGHT);
+	SetMotorPower(0,0);
+}
+
+inline void driveCurve(void) {
+	SetMotorPower(LSPEED, SPEED);
 }
 
 int wb_bounce(int direction)
 {
 	// means: if (direction != 0) then direction=1
-	if (direction != LEFT) { direction == RIGHT; }
-	
-	switch (currentstate)
-	{
-		case STATE_NO_WALL:
-			MotorSpeed(SPEED, SPEED);
-			break;
-		case STATE_WALL_LOST:
-			MotorSpeed(0,0);
-			break;
-		case STATE_FRONT:
-			MotorSpeed(0,0);
-			break;
-		case STATE_LEFT:
-			// hold on
-			MotorSpeed(0,0);
-			// drive a little back
-			MotorDir(BREAK, RWD);
-			MotorSpeed(0, SPEED);
-			Msleep(100);
-			MotorSpeed(0,0);
-			// drive a curve for next collision
-			MotorDir(FWD, FWD);
-			MotorSpeed(SPEED, 2*SPEED);
-			break;
-		case STATE_RIGHT:
-			MotorSpeed(0,0);
-			break;
-		case STATE_LINE:
-			MotorSpeed(0,0);
-			return 0;
-			break;
-	}
+	if (direction != LEFT) { direction = RIGHT; }
+
+	// drive a little back
+	driveBack(40);
+	// drive a curve for next collision
+	driveCurve();
+
+	// reset foo
+	// SetMotorPower(0,0);
+	// MotorDir(FWD, FWD);
+
 	return 1;
 }
 
 void wb_clean() {
-	
+
 }

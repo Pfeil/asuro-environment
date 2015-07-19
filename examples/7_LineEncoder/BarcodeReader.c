@@ -26,7 +26,14 @@ volatile unsigned int tmpMeasures[M_RAW_DATAPOINTS];
 volatile unsigned int rawCounter;
 
 inline float getToleranceValue(int x) {
-	return (0.5/750)*x + 0.35;
+	float result = (0.5/750)*x + 0.35;
+	if (result < 0.5) {
+		return 0.5;
+	} else if (result > 1.0) {
+		return 1;
+	} else {
+		return result;
+	}
 }
 
 void measureDataPoint(void) {
@@ -146,7 +153,7 @@ int bcr_scanIrregularLines(unsigned char num, unsigned int spacing)
 		if (num>0 && lineCounter >= num) {
 			MotorDir(BREAK, BREAK);
 //			MotorDir(RWD, RWD);
-//			GoTurn(-10, 0, READ_SPEED);
+			GoTurn(-5, 0, READ_SPEED);
 			break;
 		}
 	} // end switch
